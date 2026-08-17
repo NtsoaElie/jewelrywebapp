@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Brand — deep purple primary, gold accent, warm neutrals */
+  --color-primary: 272 46% 23%;
+  --color-primary-dark: 272 52% 14%;
+  --color-primary-light: 270 32% 38%;
+  --color-primary-foreground: 36 33% 98%;
+
+  --color-accent: 38 46% 50%;
+  --color-accent-muted: 40 45% 93%;
+  --color-accent-foreground: 272 40% 14%;
+
+  --color-background: 36 30% 97%;
+  --color-surface: 0 0% 100%;
+  --color-foreground: 260 12% 14%;
+
+  --color-muted: 33 18% 95%;
+  --color-muted-foreground: 30 8% 42%;
+
+  --color-border: 30 16% 87%;
+
+  --color-success: 142 42% 32%;
+  --color-success-foreground: 0 0% 100%;
+  --color-warning: 36 85% 45%;
+  --color-warning-foreground: 0 0% 100%;
+  --color-error: 358 62% 43%;
+  --color-error-foreground: 0 0% 100%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans text-body antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display font-semibold text-foreground;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--color-primary));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: hsl(var(--color-accent) / 0.35);
+  }
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
