@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { ShieldCheck, Truck, Gem } from "lucide-react";
-import { getFeaturedProducts } from "../../api/mock/products";
+import { getFeaturedProducts } from "../../api/products";
 import { useAsync } from "../../hooks/useAsync";
 import { useToast } from "../../context/ToastContext";
 import { categories } from "../../data/categories";

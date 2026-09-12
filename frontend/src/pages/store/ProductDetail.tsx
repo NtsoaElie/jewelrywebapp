@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Truck, RotateCcw, ShieldCheck } from "lucide-react";
-import { getProduct, getRelatedProducts } from "../../api/mock/products";
+import { getProduct, getRelatedProducts } from "../../api/products";
 import { useAsync } from "../../hooks/useAsync";
 import { useCart } from "../../context/CartContext";
 import { categories } from "../../data/categories";

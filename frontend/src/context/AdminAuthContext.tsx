@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import type { AuthUser } from "../api/types";
-import { mockAdminLogin } from "../api/mock/auth";
+import { supabase } from "../supabaseClient";
 import { loadStore, saveStore } from "../api/mock/store";
 
 const STORE_KEY = "aurelle:admin-session";
@@ -23,11 +23,27 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (email: string, password: string) => {
-    const authedAdmin = await mockAdminLogin(email, password);
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw new Error("Incorrect email or password. Please try again.");
+
+    const role = data.user.app_metadata.role;
+    if (role !== "admin") {
+      await supabase.auth.signOut();
+      throw new Error("This account does not have admin access.");
+    }
+
+    const authedAdmin: AuthUser = {
+      id: data.user.id,
+      name: data.user.email!.split("@")[0],
+      email: data.user.email!,
+    };
     persist(authedAdmin);
   };
 
-  const logout = () => persist(null);
+  const logout = () => {
+    supabase.auth.signOut();
+    persist(null);
+  };
 
   const value: AdminAuthContextValue = { admin, isAuthenticated: admin !== null, login, logout };
 

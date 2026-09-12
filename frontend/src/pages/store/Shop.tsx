@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { SlidersHorizontal, SearchX } from "lucide-react";
 import type { ProductFilters as ProductFiltersType } from "../../api/types";
-import { getProducts } from "../../api/mock/products";
+import { getProducts } from "../../api/products";
 import { useAsync } from "../../hooks/useAsync";
 import { categories } from "../../data/categories";
 import { products as allProducts } from "../../data/products";
