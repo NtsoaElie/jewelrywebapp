@@ -4,7 +4,7 @@ import { SlidersHorizontal, SearchX } from "lucide-react";
 import type { ProductFilters as ProductFiltersType } from "../../api/types";
 import { getProducts } from "../../api/products";
 import { useAsync } from "../../hooks/useAsync";
-import { categories } from "../../data/categories";
+import { useCategories } from "../../hooks/useCategories";
 import { products as allProducts } from "../../data/products";
 import { ProductGrid, ProductGridSkeleton } from "../../components/store/ProductGrid";
 import { ProductFilters, type ShopFilterState } from "../../components/store/ProductFilters";
@@ -20,6 +20,7 @@ const ALL_COLLECTIONS = [...new Set(allProducts.map((p) => p.collection).filter(
 const PAGE_SIZE = 12;
 
 export function Shop() {
+  const { categories, byId, bySlug } = useCategories();
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") ?? undefined;
   const categorySlug = searchParams.get("category") ?? undefined;
@@ -30,7 +31,7 @@ export function Shop() {
   const [page, setPage] = useState(1);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  const activeCategory = categories.find((c) => c.slug === categorySlug);
+  const activeCategory = bySlug(categorySlug);
 
   const filters: ProductFiltersType = useMemo(
     () => ({
@@ -60,7 +61,7 @@ export function Shop() {
   ].filter(Boolean).length;
 
   const updateCategory = (categoryId: string | undefined) => {
-    const category = categories.find((c) => c.id === categoryId);
+    const category = byId(categoryId);
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       if (category) next.set("category", category.slug);

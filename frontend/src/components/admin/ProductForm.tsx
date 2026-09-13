@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import type { Product, ProductVariant } from "../../api/types";
-import type { ProductInput } from "../../api/mock/products";
-import { categories } from "../../data/categories";
+import type { ProductInput } from "../../api/products";
+import { useCategories } from "../../hooks/useCategories";
 import { Input } from "../ui/Input";
 import { Textarea } from "../ui/Textarea";
 import { Select } from "../ui/Select";
@@ -39,7 +39,7 @@ function toFormState(product?: Product): FormState {
   return {
     name: product?.name ?? "",
     description: product?.description ?? "",
-    categoryId: product?.categoryId ?? categories[0]?.id ?? "",
+    categoryId: product?.categoryId ?? "",
     price: product ? (product.price / 100).toFixed(2) : "",
     compareAtPrice: product?.compareAtPrice ? (product.compareAtPrice / 100).toFixed(2) : "",
     status: product?.status ?? "draft",
@@ -64,6 +64,7 @@ const STATUS_OPTIONS = [
 ];
 
 export function ProductForm({ initialProduct, onSubmit, submitLabel }: ProductFormProps) {
+  const { options: categoryOptions } = useCategories();
   const [form, setForm] = useState<FormState>(() => toFormState(initialProduct));
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -134,7 +135,7 @@ export function ProductForm({ initialProduct, onSubmit, submitLabel }: ProductFo
             required
             value={form.categoryId}
             onChange={(e) => set("categoryId", e.target.value)}
-            options={categories.map((c) => ({ value: c.id, label: c.name }))}
+            options={[{ value: "", label: "Select a category" }, ...categoryOptions]}
             error={errors.categoryId}
           />
           <Select label="Status" value={form.status} onChange={(e) => set("status", e.target.value as Product["status"])} options={STATUS_OPTIONS} />

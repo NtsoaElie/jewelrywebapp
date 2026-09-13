@@ -1,5 +1,5 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { getProduct, updateProduct, type ProductInput } from "../../api/mock/products";
+import { getProduct, updateProduct, type ProductInput } from "../../api/products";
 import { useAsync } from "../../hooks/useAsync";
 import { useToast } from "../../context/ToastContext";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";

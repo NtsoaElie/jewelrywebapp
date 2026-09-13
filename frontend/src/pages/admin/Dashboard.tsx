@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Package, Boxes, AlertTriangle, ShoppingCart, Clock, DollarSign } from "lucide-react";
-import { getProducts } from "../../api/mock/products";
+import { getProducts } from "../../api/products";
 import { getOrders } from "../../api/mock/orders";
 import { useAsync } from "../../hooks/useAsync";
 import { StatCard } from "../../components/admin/StatCard";

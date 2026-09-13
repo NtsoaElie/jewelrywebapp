@@ -2,10 +2,10 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Boxes } from "lucide-react";
 import type { Product } from "../../api/types";
-import { getProducts } from "../../api/mock/products";
+import { getProducts } from "../../api/products";
 import { useAsync } from "../../hooks/useAsync";
 import { useDebounce } from "../../hooks/useDebounce";
-import { categories } from "../../data/categories";
+import { useCategories } from "../../hooks/useCategories";
 import { DataTable, type DataTableColumn } from "../../components/admin/DataTable";
 import { FilterBar } from "../../components/admin/FilterBar";
 import { Select } from "../../components/ui/Select";
@@ -33,6 +33,7 @@ function matchesStockFilter(product: Product, filter: StockFilter): boolean {
 }
 
 export function Inventory() {
+  const { byId, options: categoryOptions } = useCategories();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 300);
@@ -46,7 +47,7 @@ export function Inventory() {
 
   const filtered = useMemo(() => (data ? data.items.filter((p) => matchesStockFilter(p, stockFilter)) : []), [data, stockFilter]);
   const activeCount = [debouncedSearch, categoryId, stockFilter].filter(Boolean).length;
-  const categoryName = (id: string) => categories.find((c) => c.id === id)?.name ?? "—";
+  const categoryName = (id: string) => byId(id)?.name ?? "—";
 
   const columns: DataTableColumn<Product>[] = [
     {
@@ -81,7 +82,7 @@ export function Inventory() {
           onClear={() => { setSearch(""); setCategoryId(""); setStockFilter(""); }}
           activeCount={activeCount}
         >
-          <Select aria-label="Filter by category" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} options={[{ value: "", label: "All Categories" }, ...categories.map((c) => ({ value: c.id, label: c.name }))]} className="h-11 w-auto min-w-[10rem]" />
+          <Select aria-label="Filter by category" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} options={[{ value: "", label: "All Categories" }, ...categoryOptions]} className="h-11 w-auto min-w-[10rem]" />
           <Select aria-label="Filter by stock level" value={stockFilter} onChange={(e) => setStockFilter(e.target.value as StockFilter)} options={STOCK_FILTER_OPTIONS} className="h-11 w-auto min-w-[10rem]" />
         </FilterBar>
 

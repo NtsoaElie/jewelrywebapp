@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Plus, Pencil, Trash2, Tags } from "lucide-react";
 import type { Category } from "../../api/types";
-import { getCategories, createCategory, updateCategory, deleteCategory } from "../../api/mock/categories";
+import { getCategories, createCategory, updateCategory, deleteCategory } from "../../api/categories";
 import { useAsync } from "../../hooks/useAsync";
 import { useToast } from "../../context/ToastContext";
 import { products } from "../../data/products";

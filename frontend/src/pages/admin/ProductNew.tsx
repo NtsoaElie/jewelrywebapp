@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { createProduct, type ProductInput } from "../../api/mock/products";
+import { createProduct, type ProductInput } from "../../api/products";
 import { useToast } from "../../context/ToastContext";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
 import { ProductForm } from "../../components/admin/ProductForm";

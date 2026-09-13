@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Plus, Eye, Pencil, Trash2, PackageX } from "lucide-react";
 import type { ProductFilters, ProductStatus } from "../../api/types";
-import { getProducts, deleteProduct } from "../../api/mock/products";
+import { getProducts, deleteProduct } from "../../api/products";
 import { useAsync } from "../../hooks/useAsync";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useToast } from "../../context/ToastContext";
-import { categories } from "../../data/categories";
+import { useCategories } from "../../hooks/useCategories";
 import { DataTable, type DataTableColumn } from "../../components/admin/DataTable";
 import { FilterBar } from "../../components/admin/FilterBar";
 import { Select } from "../../components/ui/Select";
@@ -30,8 +30,6 @@ const STATUS_FILTER_OPTIONS = [
   { value: "archived", label: "Archived" },
 ];
 
-const CATEGORY_FILTER_OPTIONS = [{ value: "", label: "All Categories" }, ...categories.map((c) => ({ value: c.id, label: c.name }))];
-
 const SORT_OPTIONS = [
   { value: "newest", label: "Date Added" },
   { value: "name", label: "Name" },
@@ -43,6 +41,7 @@ const SORT_OPTIONS = [
 export function Products() {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { byId, options: categoryOptions } = useCategories();
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 300);
@@ -91,7 +90,7 @@ export function Products() {
     }
   };
 
-  const categoryName = (id: string) => categories.find((c) => c.id === id)?.name ?? "—";
+  const categoryName = (id: string) => byId(id)?.name ?? "—";
 
   const columns: DataTableColumn<Product>[] = [
     {
@@ -169,7 +168,7 @@ export function Products() {
             aria-label="Filter by category"
             value={categoryId}
             onChange={(e) => { setCategoryId(e.target.value); setPage(1); }}
-            options={CATEGORY_FILTER_OPTIONS}
+            options={[{ value: "", label: "All Categories" }, ...categoryOptions]}
             className="h-11 w-auto min-w-[10rem]"
           />
           <Select

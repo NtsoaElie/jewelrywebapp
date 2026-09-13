@@ -1,29 +1,31 @@
 import { Link } from "react-router-dom";
-import { categories } from "../../data/categories";
-
-const FOOTER_COLUMNS = [
-  {
-    heading: "Shop",
-    links: categories.map((c) => ({ label: c.name, to: `/shop?category=${c.slug}` })),
-  },
-  {
-    heading: "Support",
-    links: [
-      { label: "Contact Us", to: "/contact" },
-      { label: "Shipping & Returns", to: "/contact" },
-      { label: "Track an Order", to: "/account/orders" },
-    ],
-  },
-  {
-    heading: "About",
-    links: [
-      { label: "Our Story", to: "/about" },
-      { label: "Account", to: "/account" },
-    ],
-  },
-];
+import { useCategories } from "../../hooks/useCategories";
 
 export function Footer() {
+  const { categories } = useCategories();
+
+  const footerColumns = [
+    {
+      heading: "Shop",
+      links: categories.map((c) => ({ label: c.name, to: `/shop?category=${c.slug}` })),
+    },
+    {
+      heading: "Support",
+      links: [
+        { label: "Contact Us", to: "/contact" },
+        { label: "Shipping & Returns", to: "/contact" },
+        { label: "Track an Order", to: "/account/orders" },
+      ],
+    },
+    {
+      heading: "About",
+      links: [
+        { label: "Our Story", to: "/about" },
+        { label: "Account", to: "/account" },
+      ],
+    },
+  ];
+
   return (
     <footer className="border-t border-border bg-surface">
       <div className="container grid grid-cols-2 gap-8 py-12 sm:grid-cols-4 sm:py-16">
@@ -36,7 +38,7 @@ export function Footer() {
           </p>
         </div>
 
-        {FOOTER_COLUMNS.map((col) => (
+        {footerColumns.map((col) => (
           <div key={col.heading}>
             <h3 className="text-label font-semibold uppercase tracking-wide text-foreground">{col.heading}</h3>
             <ul className="mt-3 flex flex-col gap-2.5">

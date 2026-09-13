@@ -2,41 +2,49 @@ import { useRef, useState } from "react";
 import { Star, ChevronLeft, ChevronRight, Trash2, Loader2, Plus } from "lucide-react";
 import { Badge } from "../ui/Badge";
 import { cn } from "../../utils/cn";
+import { uploadProductImage } from "../../api/storage";
 
 interface PendingImage {
   id: string;
   url: string;
+  file: File;
   status: "uploading" | "error";
+  message?: string;
 }
 
 export function ImageUploader({ images, onChange }: { images: string[]; onChange: (images: string[]) => void }) {
   const [pending, setPending] = useState<PendingImage[]>([]);
   const [removingIndex, setRemovingIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  // Uploads finish out of order, so read the newest list rather than a stale closure.
+  const imagesRef = useRef(images);
+  imagesRef.current = images;
 
-  const commitUpload = (item: PendingImage) => {
-    setTimeout(() => {
-      const failed = Math.random() < 0.12;
-      if (failed) {
-        setPending((p) => p.map((i) => (i.id === item.id ? { ...i, status: "error" } : i)));
-      } else {
-        setPending((p) => p.filter((i) => i.id !== item.id));
-        onChange([...images, item.url]);
-      }
-    }, 700 + Math.random() * 600);
+  const commitUpload = async (item: PendingImage) => {
+    try {
+      const url = await uploadProductImage(item.file);
+      const next = [...imagesRef.current, url];
+      imagesRef.current = next;
+      setPending((p) => p.filter((i) => i.id !== item.id));
+      URL.revokeObjectURL(item.url);
+      onChange(next);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Upload failed. Please try again.";
+      setPending((p) => p.map((i) => (i.id === item.id ? { ...i, status: "error", message } : i)));
+    }
   };
 
   const handleFiles = (files: FileList | null) => {
     if (!files) return;
     Array.from(files).forEach((file) => {
-      const item: PendingImage = { id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, url: URL.createObjectURL(file), status: "uploading" };
+      const item: PendingImage = { id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, url: URL.createObjectURL(file), file, status: "uploading" };
       setPending((p) => [...p, item]);
       commitUpload(item);
     });
   };
 
   const retry = (item: PendingImage) => {
-    setPending((p) => p.map((i) => (i.id === item.id ? { ...i, status: "uploading" } : i)));
+    setPending((p) => p.map((i) => (i.id === item.id ? { ...i, status: "uploading", message: undefined } : i)));
     commitUpload(item);
   };
 
@@ -136,14 +144,17 @@ export function ImageUploader({ images, onChange }: { images: string[]; onChange
             )}
             {item.status === "error" && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-error/10 p-1 text-center" role="alert">
-                <p className="text-caption text-error">Upload failed</p>
+                <p className="text-caption text-error break-words">{item.message ?? "Upload failed"}</p>
                 <div className="flex gap-2">
                   <button type="button" onClick={() => retry(item)} className="text-caption font-medium text-primary underline">
                     Retry
                   </button>
                   <button
                     type="button"
-                    onClick={() => setPending((p) => p.filter((i) => i.id !== item.id))}
+                    onClick={() => {
+                      URL.revokeObjectURL(item.url);
+                      setPending((p) => p.filter((i) => i.id !== item.id));
+                    }}
                     className="text-caption font-medium text-muted-foreground underline"
                   >
                     Remove

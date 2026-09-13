@@ -4,16 +4,10 @@ import { Menu, Search, Heart, ShoppingBag, User, X } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useAuth } from "../../context/AuthContext";
-import { categories } from "../../data/categories";
+import { useCategories } from "../../hooks/useCategories";
 import { SearchBar } from "./SearchBar";
 import { MobileNav } from "./MobileNav";
 import { cn } from "../../utils/cn";
-
-const NAV_LINKS = [
-  { label: "Shop All", to: "/shop" },
-  ...categories.map((c) => ({ label: c.name, to: `/shop?category=${c.slug}` })),
-  { label: "About", to: "/about" },
-];
 
 export function Navbar() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -21,6 +15,13 @@ export function Navbar() {
   const { itemCount, openCart } = useCart();
   const { productIds } = useWishlist();
   const { isAuthenticated } = useAuth();
+  const { categories } = useCategories();
+
+  const navLinks = [
+    { label: "Shop All", to: "/shop" },
+    ...categories.map((c) => ({ label: c.name, to: `/shop?category=${c.slug}` })),
+    { label: "About", to: "/about" },
+  ];
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur">
@@ -39,7 +40,7 @@ export function Navbar() {
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <NavLink
               key={link.label}
               to={link.to}
@@ -111,7 +112,7 @@ export function Navbar() {
         </div>
       )}
 
-      <MobileNav open={mobileNavOpen} onClose={() => setMobileNavOpen(false)} links={NAV_LINKS} />
+      <MobileNav open={mobileNavOpen} onClose={() => setMobileNavOpen(false)} links={navLinks} />
     </header>
   );
 }

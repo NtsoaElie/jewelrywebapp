@@ -4,7 +4,7 @@ import { ShieldCheck, Truck, Gem } from "lucide-react";
 import { getFeaturedProducts } from "../../api/products";
 import { useAsync } from "../../hooks/useAsync";
 import { useToast } from "../../context/ToastContext";
-import { categories } from "../../data/categories";
+import { useCategories } from "../../hooks/useCategories";
 import { products } from "../../data/products";
 import { ProductGrid, ProductGridSkeleton } from "../../components/store/ProductGrid";
 import { CategoryCard } from "../../components/store/CategoryCard";
@@ -21,6 +21,7 @@ const VALUE_PROPS = [
 ];
 
 export function Home() {
+  const { categories } = useCategories();
   const { data: featured, loading, error, refetch } = useAsync(() => getFeaturedProducts(8), []);
   const { showToast } = useToast();
   const [email, setEmail] = useState("");

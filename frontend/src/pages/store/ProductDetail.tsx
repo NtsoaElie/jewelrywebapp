@@ -4,7 +4,7 @@ import { Truck, RotateCcw, ShieldCheck } from "lucide-react";
 import { getProduct, getRelatedProducts } from "../../api/products";
 import { useAsync } from "../../hooks/useAsync";
 import { useCart } from "../../context/CartContext";
-import { categories } from "../../data/categories";
+import { useCategories } from "../../hooks/useCategories";
 import { ProductImageGallery } from "../../components/store/ProductImageGallery";
 import { WishlistButton } from "../../components/store/WishlistButton";
 import { ProductGrid } from "../../components/store/ProductGrid";
@@ -26,6 +26,7 @@ const SHIP_INFO = [
 ];
 
 export function ProductDetail() {
+  const { byId } = useCategories();
   const { slug } = useParams<{ slug: string }>();
   const { data: product, loading, error, refetch } = useAsync(() => getProduct(slug!), [slug]);
   const { data: related } = useAsync(() => (product ? getRelatedProducts(product) : Promise.resolve([])), [product?.id]);
@@ -49,7 +50,7 @@ export function ProductDetail() {
     );
   }
 
-  const category = categories.find((c) => c.id === product.categoryId);
+  const category = byId(product.categoryId);
   const selectedVariant = product.variants.find((v) => v.id === selectedVariantId);
   // Before a size is chosen, show combined stock across all variants rather than 0 —
   // otherwise an in-stock product briefly reads as "Out of Stock" pre-selection.

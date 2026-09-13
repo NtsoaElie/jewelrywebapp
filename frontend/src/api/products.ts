@@ -1,5 +1,8 @@
 import { supabase } from "../supabaseClient";
 import type { PagedResult, Product, ProductFilters } from "./types";
+import { slugify } from "../utils/format";
+
+export type ProductInput = Omit<Product, "id" | "sku" | "slug" | "createdAt" | "rating" | "reviewCount">;
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -29,6 +32,30 @@ function rowToProduct(row: any): Product {
     status: row.status,
     createdAt: row.created_at,
   };
+}
+
+function productToRow(input: Partial<ProductInput>): Record<string, unknown> {
+  const row: Record<string, unknown> = {};
+
+  if ("name" in input) row.name = input.name;
+  if ("description" in input) row.description = input.description ?? null;
+  if ("price" in input) row.price = input.price;
+  if ("compareAtPrice" in input) row.compare_at_price = input.compareAtPrice ?? null;
+  if ("categoryId" in input) row.category_id = input.categoryId || null;
+  if ("collection" in input) row.collection = input.collection ?? null;
+  if ("images" in input) row.images = input.images;
+  if ("stock" in input) row.stock = input.stock;
+  if ("lowStockThreshold" in input) row.low_stock_threshold = input.lowStockThreshold;
+  if ("variants" in input) row.variants = input.variants;
+  if ("material" in input) row.material = input.material ?? null;
+  if ("color" in input) row.color = input.color ?? null;
+  if ("size" in input) row.size = input.size ?? null;
+  if ("weight" in input) row.weight = input.weight ?? null;
+  if ("dimensions" in input) row.dimensions = input.dimensions ?? null;
+  if ("featured" in input) row.featured = input.featured;
+  if ("status" in input) row.status = input.status;
+
+  return row;
 }
 
 export async function getProducts(filters: ProductFilters = {}): Promise<PagedResult<Product>> {
@@ -95,6 +122,7 @@ export async function getProduct(idOrSlug: string): Promise<Product | null> {
   return data ? rowToProduct(data) : null;
 }
 
+
 export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
   const { data, error } = await supabase
     .from("products")
@@ -120,4 +148,35 @@ export async function getRelatedProducts(product: Product, limit = 4): Promise<P
 
   if (error) throw new Error(error.message);
   return (data ?? []).map(rowToProduct);
+}
+
+export async function createProduct(input: ProductInput): Promise<Product> {
+  const { data, error } = await supabase
+    .from("products")
+    .insert({ ...productToRow(input), slug: slugify(input.name) })
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return rowToProduct(data);
+}
+
+export async function updateProduct(productId: string, input: Partial<ProductInput>): Promise<Product> {
+  const row = productToRow(input);
+  if (input.name !== undefined) row.slug = slugify(input.name);
+
+  const { data, error } = await supabase
+    .from("products")
+    .update(row)
+    .eq("id", productId)
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return rowToProduct(data);
+}
+
+export async function deleteProduct(productId: string): Promise<void> {
+  const { error } = await supabase.from("products").delete().eq("id", productId);
+  if (error) throw new Error(error.message);
 }
