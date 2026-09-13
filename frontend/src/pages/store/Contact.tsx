@@ -6,7 +6,7 @@ import { Textarea } from "../../components/ui/Textarea";
 import { Button } from "../../components/ui/Button";
 
 const CONTACT_INFO = [
-  { icon: Mail, label: "hello@aurelle.com" },
+  { icon: Mail, label: "hello@kbcgoldjewel.com" },
   { icon: Phone, label: "+1 (555) 018-2947" },
   { icon: MapPin, label: "142 Wren Street, Portland, OR" },
 ];

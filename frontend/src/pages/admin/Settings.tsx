@@ -34,9 +34,9 @@ export function Settings() {
   const { showToast } = useToast();
   const [saving, setSaving] = useState(false);
 
-  const [storeName, setStoreName] = useState("Aurelle");
+  const [storeName, setStoreName] = useState("KBC Gold Jewel & Accessories");
   const [storeDescription, setStoreDescription] = useState("Fine jewelry crafted with timeless elegance.");
-  const [supportEmail, setSupportEmail] = useState("hello@aurelle.com");
+  const [supportEmail, setSupportEmail] = useState("hello@kbcgoldjewel.com");
 
   const [primaryColor, setPrimaryColor] = useState("#3b1f5c");
   const [accentColor, setAccentColor] = useState("#c99a3d");
@@ -49,7 +49,7 @@ export function Settings() {
   const [notifyReviews, setNotifyReviews] = useState(false);
 
   const [adminName, setAdminName] = useState("Admin");
-  const [adminEmail, setAdminEmail] = useState("admin@aurelle.com");
+  const [adminEmail, setAdminEmail] = useState("admin@kbcgoldjewel.com");
 
   const handleSave = async (e: FormEvent) => {
     e.preventDefault();

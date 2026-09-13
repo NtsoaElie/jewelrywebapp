@@ -33,7 +33,7 @@ export function AdminLogin() {
       <div className="w-full max-w-sm rounded-lg bg-surface p-8 shadow-overlay">
         <div className="flex flex-col items-center text-center">
           <Gem className="h-8 w-8 text-primary" aria-hidden="true" />
-          <h1 className="mt-3 font-display text-h2 font-semibold text-foreground">Aurelle Admin</h1>
+          <h1 className="mt-3 font-display text-h2 font-semibold text-foreground">KBC Gold Admin</h1>
           <p className="mt-1 text-small text-muted-foreground">Sign in to manage your store.</p>
         </div>
 

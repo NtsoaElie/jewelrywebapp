@@ -29,7 +29,7 @@ export function Footer() {
       <div className="container grid grid-cols-2 gap-8 py-12 sm:grid-cols-4 sm:py-16">
         <div className="col-span-2 sm:col-span-1">
           <Link to="/" className="font-display text-h3 font-semibold text-primary">
-            Aurelle
+            KBC Gold Jewel & Accessories
           </Link>
           <p className="mt-3 max-w-xs text-small text-muted-foreground">
             Fine jewelry crafted with timeless elegance, made to be worn and loved for a lifetime.
@@ -53,7 +53,7 @@ export function Footer() {
       </div>
       <div className="border-t border-border py-5">
         <p className="container text-center text-caption text-muted-foreground">
-          © {new Date().getFullYear()} Aurelle. All rights reserved.
+          © {new Date().getFullYear()} KBC Gold Jewel & Accessories. All rights reserved.
         </p>
       </div>
     </footer>

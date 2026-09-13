@@ -35,7 +35,7 @@ export function Navbar() {
         </button>
 
         <Link to="/" className="font-display text-h3 font-semibold tracking-wide text-primary sm:text-h2">
-          Aurelle
+          KBC Gold Jewel & Accessories
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">

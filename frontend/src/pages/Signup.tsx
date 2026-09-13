@@ -22,7 +22,7 @@ export function Signup() {
     setSubmitting(true);
     try {
       await register(name, email, password);
-      showToast("Account created", { description: `Welcome to Aurelle, ${name.split(" ")[0]}.` });
+      showToast("Account created", { description: `Welcome to KBC Gold Jewel & Accessories, ${name.split(" ")[0]}.` });
       navigate("/account", { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -36,7 +36,7 @@ export function Signup() {
       <div className="w-full max-w-sm">
         <h1 className="text-center font-display text-h1 font-semibold text-foreground">Create Account</h1>
         <p className="mt-2 text-center text-small text-muted-foreground">
-          Join Aurelle to track orders, save favorites, and check out faster.
+          Join KBC Gold Jewel & Accessories to track orders, save favorites, and check out faster.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4" noValidate>

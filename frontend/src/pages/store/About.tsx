@@ -28,7 +28,7 @@ export function About() {
         <div>
           <h2 className="font-display text-h1 font-semibold text-foreground">Founded on a simple idea</h2>
           <p className="mt-4 max-w-prose text-body text-muted-foreground">
-            Aurelle was founded on the belief that fine jewelry shouldn't sit in a box waiting for a special
+            KBC Gold Jewel & Accessories was founded on the belief that fine jewelry shouldn't sit in a box waiting for a special
             occasion. We design pieces meant to be worn daily — light enough for everyday comfort, and
             substantial enough to last a lifetime.
           </p>

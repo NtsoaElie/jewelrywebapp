@@ -24,7 +24,7 @@ export function AdminMobileNav({ open, onClose }: { open: boolean; onClose: () =
         <div className="flex h-16 items-center justify-between px-5">
           <div className="flex items-center gap-2">
             <Gem className="h-5 w-5 text-accent" aria-hidden="true" />
-            <span className="font-display text-h3 font-semibold text-primary-foreground">Aurelle Admin</span>
+            <span className="font-display text-h3 font-semibold text-primary-foreground">KBC Gold Admin</span>
           </div>
           <button
             type="button"

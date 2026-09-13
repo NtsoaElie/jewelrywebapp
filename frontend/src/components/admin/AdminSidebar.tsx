@@ -41,7 +41,7 @@ export function AdminSidebar() {
     <aside className="hidden w-60 shrink-0 flex-col bg-primary-dark lg:flex">
       <div className="flex h-16 items-center gap-2 px-5">
         <Gem className="h-5 w-5 text-accent" aria-hidden="true" />
-        <span className="font-display text-h3 font-semibold text-primary-foreground">Aurelle Admin</span>
+        <span className="font-display text-h3 font-semibold text-primary-foreground">KBC Gold Admin</span>
       </div>
       <AdminNavList />
     </aside>
